@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-path = '/path/to/train'
+path = 'fer2013_ready/train'
 
 label_mapping = {
     "happy": 0,

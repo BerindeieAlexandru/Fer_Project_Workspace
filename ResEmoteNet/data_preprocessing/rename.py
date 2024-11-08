@@ -1,32 +1,49 @@
 import os
-import shutil
 
-# Define the source directory
-source_dir = 'data_dir'
+# Define base paths
+base_dir = 'fer2013_balanced'  # Original directory
+new_base_dir = 'fer2013'  # New base directory for renamed files
+dataset_dirs = {'train': 'train', 'validation': 'val', 'test': 'test'}  # Mapping original to new names
 
-# Define the destination directory
-destination_dir = 'out_dir'
+# Create new directory structure
+for original_split, new_split in dataset_dirs.items():
+    split_path = os.path.join(new_base_dir, new_split)
+    os.makedirs(split_path, exist_ok=True)
+    # Only create subdirectories if the original directory exists (handles validation correctly)
+    original_split_path = os.path.join(base_dir, original_split)
+    if os.path.exists(original_split_path):
+        for emotion in os.listdir(original_split_path):
+            os.makedirs(os.path.join(split_path, emotion), exist_ok=True)
 
-# Mapping for folder names
-folder_mapping = {'test': 'test', 
-                  'train': 'train', 
-                  'validation': 'val'}
 
-# Iterate over the folders (test, train, validation)
-for folder in ['test', 'train', 'validation']:
-    folder_path = os.path.join(source_dir, folder)
-    
-    # Iterate over the class folders inside each folder
-    for class_folder in os.listdir(folder_path):
-        class_folder_path = os.path.join(folder_path, class_folder)
-        
-        # Iterate over the images in the class folder
-        for index, image in enumerate(os.listdir(class_folder_path)):
-            # Get the image name and extension
-            image_name, image_ext = os.path.splitext(image)
-            
-            # Construct the new image name
-            new_image_name = f"{folder_mapping[folder]}_{index}_{class_folder}{image_ext}"
-            
-            # Rename the image and move it to the destination folder
-            shutil.move(os.path.join(class_folder_path, image), os.path.join(destination_dir, folder, new_image_name))
+# Function to rename and move images
+def rename_images_in_folder(split, emotion, src_folder, dst_folder):
+    # List all images in the current emotion folder
+    images = [img for img in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, img))]
+
+    for idx, img_name in enumerate(images, start=1):
+        # Create new filename in the format: <split>_<index>_<emotion>.jpg
+        new_name = f"{split}_{idx}_{emotion}.jpg"
+
+        # Define source and destination paths
+        src = os.path.join(src_folder, img_name)
+        dst = os.path.join(dst_folder, new_name)
+
+        # Rename and move the file
+        os.rename(src, dst)
+
+
+# Rename images in each dataset split
+for original_split, new_split in dataset_dirs.items():
+    split_path = os.path.join(base_dir, original_split)
+    new_split_path = os.path.join(new_base_dir, new_split)
+
+    if os.path.exists(split_path):  # Ensure the original directory exists
+        for emotion in os.listdir(split_path):
+            emotion_src_path = os.path.join(split_path, emotion)
+            emotion_dst_path = os.path.join(new_split_path, emotion)
+
+            # Rename and move images in each emotion folder
+            rename_images_in_folder(new_split, emotion, emotion_src_path, emotion_dst_path)
+
+print("Images successfully renamed and moved to the new directory structure.")
