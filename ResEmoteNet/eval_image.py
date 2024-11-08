@@ -7,13 +7,14 @@ from PIL import Image
 import numpy as np
 from approach.ResEmoteNet import ResEmoteNet
 
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+# device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+device = torch.device("cuda")
 
 # Emotions labels
 emotions = ['happy', 'surprise', 'sad', 'anger', 'disgust', 'fear', 'neutral']
 
 model = ResEmoteNet().to(device)
-checkpoint = torch.load('best_model.pth', weights_only=True)
+checkpoint = torch.load('fer_model.pth', weights_only=False)
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
@@ -83,7 +84,7 @@ def detect_bounding_box(image):
     return faces
 
 # Load the image file
-image = cv2.imread('image_test.jpg')
+image = cv2.imread(r'path_to_image')
 # Process the image
 faces = detect_bounding_box(image)
 
