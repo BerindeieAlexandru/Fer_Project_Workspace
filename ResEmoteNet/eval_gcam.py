@@ -10,15 +10,14 @@ from approach.ResEmoteNet import ResEmoteNet
 from retinaface import RetinaFace
 
 # Set the device
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-device = torch.device("cpu")
+device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device}")
 
 class_labels = ['happy', 'surprise', 'sad', 'anger', 'disgust', 'fear', 'neutral']
 
 # Load the model
 model = ResEmoteNet().to(device)
-checkpoint = torch.load('best_model.pth', weights_only=True)
+checkpoint = torch.load('fer_model.pth', weights_only=False)
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
@@ -54,7 +53,7 @@ def detect_emotion(pil_crop_img):
 
     predicted_class_idx = predicted_class.item()
 
-    one_hot_output = torch.FloatTensor(1, probabilities.shape[1]).zero_()
+    one_hot_output = torch.FloatTensor(1, probabilities.shape[1]).zero_().to(device)
     one_hot_output[0][predicted_class_idx] = 1
     logits.backward(one_hot_output, retain_graph=True)
 
@@ -135,11 +134,11 @@ def detect_bounding_box(video_frame, counter):
 # Function to save the video output
 def create_video_out():
     video_capture = cv2.VideoCapture(0)
-    fps = 10
+    fps = 15
     out_file_name = 'cam_eval_video.mp4'
     frame_width = int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(out_file_name, fourcc, fps, (frame_width, frame_height))
     return out, video_capture
 
