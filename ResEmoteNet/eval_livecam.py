@@ -6,17 +6,26 @@ import torchvision.transforms as transforms
 from PIL import Image
 import numpy as np
 from approach.ResEmoteNet import ResEmoteNet
+import mediapipe as mp
 
 
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-
+# device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+device = "cuda"
 # Emotions labels
 emotions = ['happy', 'surprise', 'sad', 'anger', 'disgust', 'fear', 'neutral']
 
+# load when saved arhitecture and weights using authors one
 model = ResEmoteNet().to(device)
-checkpoint = torch.load('best_model.pth', weights_only=True)
+checkpoint = torch.load('fer_model.pth', weights_only=False)
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
+
+
+# # load when saved as state dict when trained by myself
+# model = ResEmoteNet().to(device)
+# checkpoint = torch.load('best_model.pth')
+# model.load_state_dict(checkpoint)
+# model.eval()
 
 
 transform = transforms.Compose([
@@ -26,10 +35,15 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
+# Haar Cascade Classifier for Face Detection
+# face_classifier = cv2.CascadeClassifier(
+#     cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+# )
 
-face_classifier = cv2.CascadeClassifier(
-    cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-)
+# Initialize MediaPipe Face Detection
+mp_face_detection = mp.solutions.face_detection
+face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.7)
+
 
 # Access the webcam
 video_capture = cv2.VideoCapture(0)
@@ -37,7 +51,7 @@ video_capture = cv2.VideoCapture(0)
 # Settings for text
 font = cv2.FONT_HERSHEY_SIMPLEX
 font_scale = 1.2
-font_color = (0, 255, 0)  # This is BGR color
+font_color = (0, 255, 0)
 thickness = 3
 line_type = cv2.LINE_AA
 
@@ -83,19 +97,43 @@ def print_all_emotion(x, y, w, h, video_frame):
 # Identify Face in Video Stream
 def detect_bounding_box(video_frame, counter):
     global max_emotion
-    gray_image = cv2.cvtColor(video_frame, cv2.COLOR_BGR2GRAY)
-    faces = face_classifier.detectMultiScale(gray_image, 1.1, 5, minSize=(40, 40))
-    for (x, y, w, h) in faces:
-        # Draw bounding box on face
-        cv2.rectangle(video_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        # Crop bounding box
-        if counter == 0:
-            max_emotion = get_max_emotion(x, y, w, h, video_frame) 
-        
-        print_max_emotion(x, y, video_frame, max_emotion) 
-        print_all_emotion(x, y, w, h, video_frame) 
 
-    return faces
+    # Convert image to RGB for MediaPipe compatibility
+    rgb_frame = cv2.cvtColor(video_frame, cv2.COLOR_BGR2RGB)
+    results = face_detection.process(rgb_frame)
+    if results.detections:
+        for detection in results.detections:
+            # Convert normalized coordinates to pixel values
+            bboxC = detection.location_data.relative_bounding_box
+            ih, iw, _ = video_frame.shape
+            x, y, w, h = int(bboxC.xmin * iw), int(bboxC.ymin * ih), int(bboxC.width * iw), int(bboxC.height * ih)
+
+            # Draw bounding box on face
+            cv2.rectangle(video_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+            # Crop bounding box and evaluate emotion
+            if counter == 0:
+                max_emotion = get_max_emotion(x, y, w, h, video_frame)
+
+            print_max_emotion(x, y, video_frame, max_emotion)
+            print_all_emotion(x, y, w, h, video_frame)
+
+    return results.detections if results.detections else []
+
+    # adjusted the detection so we comment this for now
+    # gray_image = cv2.cvtColor(video_frame, cv2.COLOR_BGR2GRAY)
+    # faces = face_classifier.detectMultiScale(gray_image, 1.1, 5, minSize=(40, 40))
+    # for (x, y, w, h) in faces:
+    #     # Draw bounding box on face
+    #     cv2.rectangle(video_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    #     # Crop bounding box
+    #     if counter == 0:
+    #         max_emotion = get_max_emotion(x, y, w, h, video_frame)
+    #
+    #     print_max_emotion(x, y, video_frame, max_emotion)
+    #     print_all_emotion(x, y, w, h, video_frame)
+    #
+    # return faces
 
 counter = 0
 evaluation_frequency = 5

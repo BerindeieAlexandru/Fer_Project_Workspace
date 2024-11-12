@@ -14,7 +14,7 @@ device = torch.device("cuda")
 emotions = ['happy', 'surprise', 'sad', 'anger', 'disgust', 'fear', 'neutral']
 
 model = ResEmoteNet().to(device)
-checkpoint = torch.load('fer_model.pth', weights_only=False)
+checkpoint = torch.load('best_model.pth', weights_only=True)
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
