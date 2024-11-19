@@ -1,16 +1,15 @@
 import os
-
 import torch
 import pandas as pd
 from tqdm import tqdm
-
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import torch.optim as optim
-
 from approach.ResEmoteNet import ResEmoteNet
 from get_dataset import Four4All
 from ranger_adabelief import RangerAdaBelief
+from torch.optim.lr_scheduler import CyclicLR
+import numpy as np
 
 
 device = "cuda"
@@ -40,32 +39,43 @@ transform = transforms.Compose([
 # ])
 
 # Load the dataset
+
 train_dataset = Four4All(csv_file=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\train_labels.csv',
                          img_dir=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\fer2013_o_r\train', transform=transform)
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 train_image, train_label = next(iter(train_loader))
 
 
 val_dataset = Four4All(csv_file=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\val_labels.csv',
                        img_dir=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\fer2013_o_r\val', transform=transform)
-val_loader = DataLoader(val_dataset, batch_size=8, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=16, shuffle=True)
 val_image, val_label = next(iter(val_loader))
 
 
 test_dataset = Four4All(csv_file=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\test_labels.csv',
                         img_dir=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\fer2013_o_r\test', transform=transform)
-test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 test_image, test_label = next(iter(test_loader))
-
 
 print(f"Train batch: Image shape {train_image.shape}, Label shape {train_label.shape}")
 print(f"Validation batch: Image shape {val_image.shape}, Label shape {val_label.shape}")
 print(f"Test batch: Image shape {test_image.shape}, Label shape {test_label.shape}")
 
 
-# Load the model
-model = ResEmoteNet().to(device)
+# # Load the labels for the entire training dataset
+# train_labels = []
+# for _, labels in train_loader:
+#     train_labels.extend(labels.numpy())
+#
+# train_labels = np.array(train_labels)
+# # Compute the class weights
+# class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(train_labels), y=train_labels)
+# class_weights = torch.tensor(class_weights, dtype=torch.float32).to(device)
+# print(f"Computed Class Weights: {class_weights}")
 
+# Load the model
+
+model = ResEmoteNet().to(device)
 
 # Print the number of parameters
 total_params = sum(p.numel() for p in model.parameters())
@@ -73,15 +83,17 @@ print(f'{total_params:,} total parameters.')
 
 
 # Hyperparameters
+# criterion = torch.nn.CrossEntropyLoss(weight=class_weights)
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=1e-4)
 # optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
 # optimizer = torch.optim.RAdam(model.parameters(), lr=0.001, weight_decay=1e-4)
 # optimizer = RangerAdaBelief(model.parameters(), lr=0.001, weight_decay=1e-4)
-
+scheduler = CyclicLR(optimizer, base_lr=1e-6, max_lr=1e-3, step_size_up=len(train_loader), mode='triangular')
 
 patience = 15
 best_val_acc = 0
+best_test_acc = 0
 patience_counter = 0
 epoch_counter = 0
 
@@ -113,6 +125,8 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
+        scheduler.step()
+
         running_loss += loss.item()
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -142,6 +156,9 @@ for epoch in range(num_epochs):
     test_acc = test_correct / test_total
     test_losses.append(test_loss)
     test_accuracies.append(test_acc)
+    if test_acc > best_test_acc:
+        best_test_acc = test_acc
+        torch.save(model.state_dict(), '../snapshots/best_test_model.pth')
 
     model.eval()
     val_running_loss = 0.0
@@ -164,11 +181,11 @@ for epoch in range(num_epochs):
 
     print(f"Epoch {epoch+1}, Train Loss: {train_loss}, Train Accuracy: {train_acc}, Test Loss: {test_loss}, Test Accuracy: {test_acc}, Validation Loss: {val_loss}, Validation Accuracy: {val_acc}")
     epoch_counter += 1
-    
+
     if val_acc > best_val_acc:
         best_val_acc = val_acc
-        patience_counter = 0 
-        torch.save(model.state_dict(), '../snapshots/best_model.pth')
+        patience_counter = 0
+        torch.save(model.state_dict(), '../snapshots/best_val_model.pth')
     else:
         patience_counter += 1
         print(f"No improvement in validation accuracy for {patience_counter} epochs.")

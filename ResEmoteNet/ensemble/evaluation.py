@@ -22,8 +22,8 @@ transform = transforms.Compose([
 
 # Load the test dataset
 test_dataset = Four4All(
-    csv_file=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\val_labels.csv',
-    img_dir=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\fer2013_o_r\val',
+    csv_file=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\test_labels.csv',
+    img_dir=r'D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\fer2013_o_r\test',
     transform=transform
 )
 test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
@@ -35,27 +35,28 @@ model_paths = [
     # "../snapshots/model_epoch_50.pth",
     # "../snapshots/model_epoch_60.pth",
     # "../snapshots/model_epoch_80.pth",
-    # "../snapshots/best_model.pth",
-    r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer_model.pth"
+    # "../snapshots/best_test_model.pth",
+    # "../snapshots/best_val_model.pth"
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer_model.pth"
 ]
 
 # Load the models
 models = []
 
-# # with weights_only
-# for path in model_paths:
-#     model = ResEmoteNet().to(device)
-#     model.load_state_dict(torch.load(path))
-#     model.eval()  # Set the model to evaluation mode
-#     models.append(model)
-
-# without weights_only
+# with weights_only
 for path in model_paths:
     model = ResEmoteNet().to(device)
-    checkpoint = torch.load(path, weights_only=False)
-    model.load_state_dict(checkpoint['model_state_dict'])
+    model.load_state_dict(torch.load(path))
     model.eval()
     models.append(model)
+
+# # without weights_only
+# for path in model_paths:
+#     model = ResEmoteNet().to(device)
+#     checkpoint = torch.load(path, weights_only=False)
+#     model.load_state_dict(checkpoint['model_state_dict'])
+#     model.eval()
+#     models.append(model)
 
 
 # Function to get ensemble predictions
