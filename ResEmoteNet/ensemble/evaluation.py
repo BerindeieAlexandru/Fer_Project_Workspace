@@ -36,7 +36,8 @@ model_paths = [
     # "../snapshots/model_epoch_60.pth",
     # "../snapshots/model_epoch_80.pth",
     # "../snapshots/best_test_model.pth",
-    # "../snapshots/best_val_model.pth"
+    # "../snapshots/best_val_model.pth",
+    r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\ensemble\best_fine_tuned_model.pth"
     # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer_model.pth"
 ]
 

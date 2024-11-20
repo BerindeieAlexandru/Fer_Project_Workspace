@@ -8,7 +8,7 @@ import torch.optim as optim
 from approach.ResEmoteNet import ResEmoteNet
 from get_dataset import Four4All
 from ranger_adabelief import RangerAdaBelief
-from torch.optim.lr_scheduler import CyclicLR
+from torch.optim.lr_scheduler import CyclicLR, CosineAnnealingWarmRestarts
 import numpy as np
 
 
@@ -19,7 +19,9 @@ print(f"Using {device} device")
 transform = transforms.Compose([
     transforms.Resize((64, 64)),
     transforms.Grayscale(num_output_channels=3),
-    transforms.RandomHorizontalFlip(),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.RandomRotation(degrees=10),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
     transforms.ToTensor(),
     transforms.Normalize(
         mean=[0.485, 0.456, 0.406],
@@ -89,13 +91,20 @@ optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=1
 # optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
 # optimizer = torch.optim.RAdam(model.parameters(), lr=0.001, weight_decay=1e-4)
 # optimizer = RangerAdaBelief(model.parameters(), lr=0.001, weight_decay=1e-4)
-scheduler = CyclicLR(optimizer, base_lr=1e-6, max_lr=1e-3, step_size_up=len(train_loader), mode='triangular')
+scheduler = CyclicLR(optimizer, base_lr=1e-5, max_lr=1e-3, step_size_up=len(train_loader), mode='exp_range')
+# scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)
 
 patience = 15
 best_val_acc = 0
 best_test_acc = 0
 patience_counter = 0
 epoch_counter = 0
+
+best_test_acc_30_40 = 0
+best_test_acc_40_50 = 0
+best_test_acc_50_60 = 0
+best_test_acc_60_70 = 0
+best_test_acc_70_80 = 0
 
 num_epochs = 80
 save_epochs = [30, 40, 50, 60, 80]
@@ -156,9 +165,31 @@ for epoch in range(num_epochs):
     test_acc = test_correct / test_total
     test_losses.append(test_loss)
     test_accuracies.append(test_acc)
-    if test_acc > best_test_acc:
-        best_test_acc = test_acc
-        torch.save(model.state_dict(), '../snapshots/best_test_model.pth')
+
+    # if test_acc > best_test_acc:
+    #     best_test_acc = test_acc
+    #     torch.save(model.state_dict(), '../snapshots/best_test_model.pth')
+    # Save the best model in each epoch range
+    if 30 <= epoch + 1 <= 40:
+        if test_acc > best_test_acc_30_40:
+            best_test_acc_30_40 = test_acc
+            torch.save(model.state_dict(), '../snapshots/best_model_30_40.pth')
+    elif 40 < epoch + 1 <= 50:
+        if test_acc > best_test_acc_40_50:
+            best_test_acc_40_50 = test_acc
+            torch.save(model.state_dict(), '../snapshots/best_model_40_50.pth')
+    elif 50 < epoch + 1 <= 60:
+        if test_acc > best_test_acc_50_60:
+            best_test_acc_50_60 = test_acc
+            torch.save(model.state_dict(), '../snapshots/best_model_50_60.pth')
+    elif 60 < epoch + 1 <= 70:
+        if test_acc > best_test_acc_60_70:
+            best_test_acc_60_70 = test_acc
+            torch.save(model.state_dict(), '../snapshots/best_model_60_70.pth')
+    elif 70 < epoch + 1 <= 80:
+        if test_acc > best_test_acc_70_80:
+            best_test_acc_70_80 = test_acc
+            torch.save(model.state_dict(), '../snapshots/best_model_70_80.pth')
 
     model.eval()
     val_running_loss = 0.0
@@ -191,9 +222,9 @@ for epoch in range(num_epochs):
         print(f"No improvement in validation accuracy for {patience_counter} epochs.")
 
         # Save models at predefined epochs
-        if (epoch + 1) in save_epochs:
-            torch.save(model.state_dict(), os.path.join(snapshot_dir, f'model_epoch_{epoch + 1}.pth'))
-            print(f"Model saved at epoch {epoch + 1}.")
+        # if (epoch + 1) in save_epochs:
+        #     torch.save(model.state_dict(), os.path.join(snapshot_dir, f'model_epoch_{epoch + 1}.pth'))
+        #     print(f"Model saved at epoch {epoch + 1}.")
 
     if patience_counter > patience:
         print("Stopping early due to lack of improvement in validation accuracy.")
