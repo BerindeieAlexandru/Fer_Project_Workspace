@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-path = 'fer2013_o_r/val'
+path = 'fer2013_o_r/train'
 
 label_mapping = {
     "happy": 0,
@@ -25,7 +25,7 @@ for filename in os.listdir(path):
 
 df = pd.DataFrame(image_data, columns=["ImageName", "Label"])
 
-csv_file_path = 'val_labels.csv'
+csv_file_path = 'train_labels.csv'
 
 df.to_csv(csv_file_path, index=False, header=False)
 

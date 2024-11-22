@@ -30,9 +30,14 @@ test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 
 # List of saved model paths
 model_paths = [
-    r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_test_model.pth",
+    r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model.pth",
     # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_val_model.pth",
     # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model_30_40.pth",
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model_40_50.pth",
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model_50_60.pth",
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model_60_70.pth",
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_model_70_80.pth",
+    # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer+_zone\snapshots\best_fine_tuned_model.pth",
     # r"D:\Alex\Documents\Master\An 2\Dizertatie\ResEmoteNet\fer_model.pth"
 
 ]

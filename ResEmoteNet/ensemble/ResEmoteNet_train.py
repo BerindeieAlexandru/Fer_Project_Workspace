@@ -16,12 +16,22 @@ device = "cuda"
 print(f"Using {device} device")
 
 # Transform the dataset
+# transform = transforms.Compose([
+#     transforms.Resize((64, 64)),
+#     transforms.Grayscale(num_output_channels=3),
+#     transforms.RandomHorizontalFlip(p=0.5),
+#     transforms.RandomRotation(degrees=10),
+#     transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+#     transforms.ToTensor(),
+#     transforms.Normalize(
+#         mean=[0.485, 0.456, 0.406],
+#         std=[0.229, 0.224, 0.225]
+#     )
+# ])
+
 transform = transforms.Compose([
     transforms.Resize((64, 64)),
     transforms.Grayscale(num_output_channels=3),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.RandomRotation(degrees=10),
-    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
     transforms.ToTensor(),
     transforms.Normalize(
         mean=[0.485, 0.456, 0.406],
@@ -166,9 +176,9 @@ for epoch in range(num_epochs):
     test_losses.append(test_loss)
     test_accuracies.append(test_acc)
 
-    # if test_acc > best_test_acc:
-    #     best_test_acc = test_acc
-    #     torch.save(model.state_dict(), '../snapshots/best_test_model.pth')
+    if test_acc > best_test_acc:
+        best_test_acc = test_acc
+        torch.save(model.state_dict(), '../snapshots/best_test_model.pth')
     # Save the best model in each epoch range
     if 30 <= epoch + 1 <= 40:
         if test_acc > best_test_acc_30_40:
