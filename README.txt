@@ -1,2 +1,0 @@
-This is the main FER projects related workspace, generally each folder represent a different project or a different approach.
-Additional testing was done on: https://www.kaggle.com/code/alexandruberindeie/fer-workspace
