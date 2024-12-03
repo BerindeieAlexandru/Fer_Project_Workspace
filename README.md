@@ -2,11 +2,20 @@
 
 **Project description:**
 
-Facial Expression Recognition (FER) is a significant machine learning challenge, focused on the accurate identification of human facial expressions. Despite recent advancements, enhancing performance and obtaining reliable results in real-world conditions continues to pose substantial difficulties. In this repo, will be presented several FER approaches, focusing on FER2013 and FER+ datasets, a widely used for this task. In the provided paper we present the problem that we are trying to solve then we present the theoretical background talking about related work, the notions used and about the dataset. We then present the methodology of research that we used to select the papers and the methods used. We present five popular and effective approaches focusing on their contribution and the results, some of those being ResEmoteNet, PAtt-Lite, Residual Masking Network. We implement them and try to improve the presented results using different augmentations on the dataset, changing hyper-parameters, employing an ensemble approach (composed of the best performing models) and even fine-tuning the models. Finally, we evaluate our method by comparing the results with leading models in the field, demonstrating a significant increase in accuracy. The results underscore the effectiveness of our approach, offering a comprehensive solution to the persistent challenges in FER, and paving the way for more empathetic AI, advanced human computer interfaces, and improved mental health support systems.
+Facial Expression Recognition (FER) is a significant machine learning challenge, focused on the accurate identification of human facial expressions. Despite recent advancements, enhancing performance and obtaining reliable results in real-world conditions continues to pose substantial difficulties.
+
+In this REPOSITORY, we will present several FER approaches, focusing on FER2013 and FER+ datasets, a widely used for this task.
+
+In the provided paper we present the problem that we are trying to solve then we present the theoretical background talking about related work, the notions used and about the dataset. We then present the methodology of research that we used to select the papers and the methods used. We present five popular and effective approaches focusing on their contribution and the results, some of those being ResEmoteNet, PAtt-Lite, Residual Masking Network.
+
+We implement them and try to improve the presented results using different augmentations on the dataset, changing hyper-parameters, employing an ensemble approach (composed of the best performing models) and even fine-tuning the models. Finally, we evaluate our method by comparing the results with leading models in the field, demonstrating a significant increase in accuracy.
+
+The results underscore the effectiveness of our approach, offering a comprehensive solution to the persistent challenges in FER, and paving the way for more empathetic AI, advanced human computer interfaces, and improved mental health support systems.
 
 ## Table of Contents
 
 - [Latest Changes](#latest-changes)
+- [Read me first](#read-me-first)
 - [Benchmark Results](#benchmark-results)
 - [ResEmoteNet](#resemotenet)
 - [PAtt-Lite](#patt-lite)
@@ -19,6 +28,16 @@ Facial Expression Recognition (FER) is a significant machine learning challenge,
 - **2024-11-08:** Initial release with ResEmoteNet
 
 - **2024-11-22:** Added final version of ResEmoteNet (see comits)
+
+- **2024-12-03:** Readme updates plus some fixes to paper
+
+## Read me first
+
+In the rest of the README you can see a table that presents the results obtained with implementations on different datasets.
+
+Then for each of those implementations we give a brief description of what we did (our experiments) and the link to the original paper where it appeared. Each of those implementation directories have its own README where you can find instructions on how to run it.
+
+Finally, we have some other mentions of thing I considered important to know and some additional resources.
 
 ## Benchmark Results
 
