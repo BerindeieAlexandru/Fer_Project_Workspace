@@ -31,6 +31,8 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 
 - **2024-12-03:** Readme updates plus some fixes to paper
 
+- **2024-12-04:** Added PAtt-Lite approach and fixed it to run
+
 ## Read me first
 
 In the rest of the README you can see a table that presents the results obtained with implementations on different datasets.
