@@ -19,6 +19,7 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 - [Benchmark Results](#benchmark-results)
 - [ResEmoteNet](#resemotenet)
 - [PAtt-Lite](#patt-lite)
+- [EmoNeXt](#emonext)
 - [Residual Masking Network](#residual-masking-network)
 - [Other Mentions](#other-mentions)
 - [License](#license)
@@ -27,11 +28,19 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 
 - **2024-11-08:** Initial release with ResEmoteNet
 
-- **2024-11-22:** Added final version of ResEmoteNet (see comits)
+- **2024-11-22:** Added enhanced version of ResEmoteNet (see comits)
 
 - **2024-12-03:** Readme updates plus some fixes to paper
 
 - **2024-12-04:** Added PAtt-Lite approach and fixed it to run
+
+- **2024-12-08:** Added experiments for PAtt-Lite
+
+- **2024-12-11:** Added datasets experiments and embeddings experiments
+
+- **2024-12-12:** Added final ResEmoteNet with good results
+
+- **2024-12-13:** Added EmoNeXt base version
 
 ## Read me first
 
@@ -89,6 +98,18 @@ To be filled.
 **Paper Reference:**
 
 - [link](https://ieeexplore.ieee.org/document/9411919)
+
+## EmoNeXt
+
+In that directory we conduct the experiments focused on the EmoNeXt model.
+
+**Experiments:**
+
+To be filled.
+
+**Paper Reference:**
+
+- [link](https://www.researchgate.net/publication/374372487_EmoNeXt_an_Adapted_ConvNeXt_for_Facial_Emotion_Recognition)
 
 ## Other Mentions
 
