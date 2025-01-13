@@ -14,15 +14,18 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 
 ## Table of Contents
 
-- [Latest Changes](#latest-changes)
-- [Read me first](#read-me-first)
-- [Benchmark Results](#benchmark-results)
-- [ResEmoteNet](#resemotenet)
-- [PAtt-Lite](#patt-lite)
-- [EmoNeXt](#emonext)
-- [Residual Masking Network](#residual-masking-network)
-- [Other Mentions](#other-mentions)
-- [License](#license)
+- [Ensemble Models For Facial Emotion Recognition](#ensemble-models-for-facial-emotion-recognition)
+  - [Table of Contents](#table-of-contents)
+  - [Latest Changes](#latest-changes)
+  - [Read me first](#read-me-first)
+  - [Benchmark Results](#benchmark-results)
+  - [ResEmoteNet](#resemotenet)
+  - [PAtt-Lite](#patt-lite)
+  - [Residual Masking Network](#residual-masking-network)
+  - [EmoNeXt](#emonext)
+  - [Other models](#other-models)
+  - [Other Mentions](#other-mentions)
+  - [License](#license)
 
 ## Latest Changes
 
@@ -34,13 +37,25 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 
 - **2024-12-04:** Added PAtt-Lite approach and fixed it to run
 
-- **2024-12-08:** Added experiments for PAtt-Lite
+- **2024-12-08:** Added experiments for PAtt-Lite and final version
 
 - **2024-12-11:** Added datasets experiments and embeddings experiments
 
 - **2024-12-12:** Added final ResEmoteNet with good results
 
 - **2024-12-13:** Added EmoNeXt base version
+
+- **2024-12-15:** Added final EmoNeXt version
+
+- **2024-12-16:** Added Residual Masking Network base version
+
+- **2024-12-18:** Added final Residual Masking Network version
+
+- **2025-01-09:** Added final Residual Masking Network version
+
+- **2025-01-10:** Added other models part 1
+
+- **2025-01-13:** Added other models part 2 finall + ensemble + use
 
 ## Read me first
 
@@ -52,12 +67,7 @@ Finally, we have some other mentions of thing I considered important to know and
 
 ## Benchmark Results
 
-| Model                    | Dataset | Ensemble | Accuracy (%) | Finetune |
-| ------------------------ | :----------: | :----------: | :-------: | :----------: |
-| ResEmoteNet              |     Fer2013     |     -     |    61.53   |     -     |
-| ResEmoteNet              |     Fer2013_b     |     -     |    74.70   |     -     |
-| PAtt-Lite                |     XX.X     |     XX.X     |    XX.X   |     XX.X     |
-| Residual Masking Network |     XX.X     |     XX.X     |    XX.X   |     XX.X     |
+To add the graph here.
 
 ## ResEmoteNet
 
@@ -81,7 +91,9 @@ In that directory we conduct the experiments focused on the PAtt-Lite model.
 
 **Experiments:**
 
-To be filled.
+- Changed dataset. hyperparameters and fine-tuning protocol
+- Changed attention layer, translated arhitecture from Tensorflow to PyTorch
+- Changed backbone model
 
 **Paper Reference:**
 
@@ -93,7 +105,7 @@ In that directory we conduct the experiments focused on the ResMaskingNet model.
 
 **Experiments:**
 
-To be filled.
+- Changed dataset, changed face model, changed models within the ensemble.
 
 **Paper Reference:**
 
@@ -105,11 +117,32 @@ In that directory we conduct the experiments focused on the EmoNeXt model.
 
 **Experiments:**
 
-To be filled.
+- Changed the backbone, loss function, hyperparameters and dataset.
 
 **Paper Reference:**
 
 - [link](https://www.researchgate.net/publication/374372487_EmoNeXt_an_Adapted_ConvNeXt_for_Facial_Emotion_Recognition)
+
+## Other models
+
+In that directory we did the experiments with the rest of well known model arhitectures. The models (taken using PyTorch models library or Timm library) were trained locally, and are the following:
+
+- EfficientNet B0 & V2M
+- Eva
+- FBNetV3B
+- MobileNet V3 & V4
+- ResNeXt50_32x4d
+
+Added ensemble apporach, along its evaluation and usage. Added single model usage.
+
+**Paper References:**
+
+- [EfficientNet](https://arxiv.org/abs/1905.11946)
+- [Eva](https://arxiv.org/abs/2211.07636)
+- [FBNetV3B](https://arxiv.org/abs/2006.02049)
+- [MobileNetV3](https://arxiv.org/abs/1905.02244)
+- [MobileNetV4](https://arxiv.org/abs/2404.10518)
+- [ResNeXt50_32x4d](https://arxiv.org/abs/1611.05431)
 
 ## Other Mentions
 
@@ -121,6 +154,6 @@ To be filled.
 
 - [Kaggle link for extra experiments](https://www.kaggle.com/code/alexandruberindeie/fer-workspace)
 
-### License
+## License
 
 This repository is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
