@@ -74,16 +74,19 @@ def plot_confusion_matrix(
     plt.tight_layout()
 
 
-checkpoint_name = "cbam_resnet50_rot30_2019Nov15_12.40"
+checkpoint_name = "resnet34_test_2024May28_12.14"
 
 
 def main():
-    with open("./configs/fer2013_config.json") as f:
+    with open("D:\\Alex\\Desktop\\ResidualMaskingNetwork-master\\configs\\fer2013_config.json") as f:
         configs = json.load(f)
 
-    state = torch.load("./saved/checkpoints/{}".format(checkpoint_name))
+    # state = torch.load("D:\\Alex\\Desktop\\ResidualMaskingNetwork-master\\checkpoint\\".format(checkpoint_name))
+    state = torch.load("D:\\Alex\\Desktop\\ResidualMaskingNetwork-master\\checkpoint\\resnet34_test_2024May28_12.14")
 
     from models import cbam_resnet50
+    from models import alexnet
+    from models import resnet34
 
     model = cbam_resnet50
 

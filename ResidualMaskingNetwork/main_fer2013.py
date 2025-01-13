@@ -19,7 +19,6 @@ np.random.seed(seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-
 import models
 from models import segmentation
 
@@ -40,20 +39,22 @@ def main(config_path):
     # load model and data_loader
     model = get_model(configs)
 
-    train_set, val_set, test_set = get_dataset(configs)
+    model.eval()
 
-    # init trainer and make a training
-    # from trainers.fer2013_trainer import FER2013Trainer
-    from trainers.tta_trainer import FER2013Trainer
-
-    # from trainers.centerloss_trainer import FER2013Trainer
-    trainer = FER2013Trainer(model, train_set, val_set, test_set, configs)
-
-    if configs["distributed"] == 1:
-        ngpus = torch.cuda.device_count()
-        mp.spawn(trainer.train, nprocs=ngpus, args=())
-    else:
-        trainer.train()
+    # train_set, val_set, test_set = get_dataset(configs)
+    #
+    # # init trainer and make a training
+    # # from trainers.fer2013_trainer import FER2013Trainer
+    # from trainers.tta_trainer import FER2013Trainer
+    #
+    # # from trainers.centerloss_trainer import FER2013Trainer
+    # trainer = FER2013Trainer(model, train_set, val_set, test_set, configs)
+    #
+    # if configs["distributed"] == 1:
+    #     ngpus = torch.cuda.device_count()
+    #     mp.spawn(trainer.train, nprocs=ngpus, args=())
+    # else:
+    #     trainer.train()
 
 
 def get_model(configs):

@@ -177,7 +177,7 @@ class RMN:
             face_image = face_image.cuda(0)
 
         face_image = torch.unsqueeze(face_image, dim=0)
-
+    
         output = torch.squeeze(self.emo_model(face_image), 0)
         proba = torch.softmax(output, 0)
 
