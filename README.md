@@ -67,7 +67,7 @@ Finally, we have some other mentions of thing I considered important to know and
 
 ## Benchmark Results
 
-To add the graph here.
+<img src="OtherModels\graphs\test_metrics_v2.png" alt="graph" width="600" height="350">
 
 ## ResEmoteNet
 
@@ -134,6 +134,10 @@ In that directory we did the experiments with the rest of well known model arhit
 - ResNeXt50_32x4d
 
 Added ensemble apporach, along its evaluation and usage. Added single model usage.
+
+Results:
+
+<img src="OtherModels\graphs\validation_metrics.png" alt="graph" width="650" height="550">
 
 **Paper References:**
 
