@@ -16,7 +16,6 @@ The results underscore the effectiveness of our approach, offering a comprehensi
 
 - [Ensemble Models For Facial Emotion Recognition](#ensemble-models-for-facial-emotion-recognition)
   - [Table of Contents](#table-of-contents)
-  - [Latest Changes](#latest-changes)
   - [Read me first](#read-me-first)
   - [Benchmark Results](#benchmark-results)
   - [ResEmoteNet](#resemotenet)
@@ -24,38 +23,9 @@ The results underscore the effectiveness of our approach, offering a comprehensi
   - [Residual Masking Network](#residual-masking-network)
   - [EmoNeXt](#emonext)
   - [Other models](#other-models)
+  - [Latest Changes](#latest-changes)
   - [Other Mentions](#other-mentions)
   - [License](#license)
-
-## Latest Changes
-
-- **2024-11-08:** Initial release with ResEmoteNet
-
-- **2024-11-22:** Added enhanced version of ResEmoteNet (see comits)
-
-- **2024-12-03:** Readme updates plus some fixes to paper
-
-- **2024-12-04:** Added PAtt-Lite approach and fixed it to run
-
-- **2024-12-08:** Added experiments for PAtt-Lite and final version
-
-- **2024-12-11:** Added datasets experiments and embeddings experiments
-
-- **2024-12-12:** Added final ResEmoteNet with good results
-
-- **2024-12-13:** Added EmoNeXt base version
-
-- **2024-12-15:** Added final EmoNeXt version
-
-- **2024-12-16:** Added Residual Masking Network base version
-
-- **2024-12-18:** Added final Residual Masking Network version
-
-- **2025-01-09:** Added final Residual Masking Network version
-
-- **2025-01-10:** Added other models part 1
-
-- **2025-01-13:** Added other models part 2 finall + ensemble + use
 
 ## Read me first
 
@@ -148,11 +118,49 @@ Results:
 - [MobileNetV4](https://arxiv.org/abs/2404.10518)
 - [ResNeXt50_32x4d](https://arxiv.org/abs/1611.05431)
 
+## Latest Changes
+
+- **2024-11-08:** Initial release with ResEmoteNet
+
+- **2024-11-22:** Added enhanced version of ResEmoteNet (see comits)
+
+- **2024-12-03:** Readme updates plus some fixes to paper
+
+- **2024-12-04:** Added PAtt-Lite approach and fixed it to run
+
+- **2024-12-08:** Added experiments for PAtt-Lite and final version
+
+- **2024-12-11:** Added datasets experiments and embeddings experiments
+
+- **2024-12-12:** Added final ResEmoteNet with good results
+
+- **2024-12-13:** Added EmoNeXt base version
+
+- **2024-12-15:** Added final EmoNeXt version
+
+- **2024-12-16:** Added Residual Masking Network base version
+
+- **2024-12-18:** Added final Residual Masking Network version
+
+- **2025-01-09:** Added final Residual Masking Network version
+
+- **2025-01-10:** Added other models part 1
+
+- **2025-01-13:** Added other models part 2 finall + ensemble + use
+
 ## Other Mentions
 
  **Future Work:**
 
  Plans for future work include exploring other ensemble methods and incorporating additional datasets.
+
+**Plan for Work**
+
+Extend the dataset and test results on it (Weeks 1-4).
+
+Find optimization for training and methods to quantize the models if needed and evaluate new models (Weeks 5-8).
+
+Prepare the final paper and the presentation (Weeks 9-12).
 
  **Related Resources:**
 
